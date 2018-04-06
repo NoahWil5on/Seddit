@@ -1,17 +1,17 @@
 const models = require('../models');
-const Domo = models.Domo;
+const Post = models.Post;
 
 const makerPage = (req, res) => {
-  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    Post.PostModel.findAll(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.render('app', { csrfToken: req.csrfToken(), domos: docs });
+    return res.render('app', { csrfToken: req.csrfToken(), post: docs });
   });
 };
-const makeDomo = (request, response) => {
+const makePost = (request, response) => {
   const req = request;
   const res = response;
 
@@ -22,13 +22,13 @@ const makeDomo = (request, response) => {
     return res.status(400).json({ error: 'RAWR! Domo must have a name and age!' });
   }
 
-  const newDomo = new Domo.DomoModel({
+  const newPost = new Post.PostModel({
     name,
     age,
     owner: req.session.account._id,
   });
 
-  return newDomo.save().then(() => res.json({ redirect: '/maker' })).catch((err) => {
+  return newPost.save().then(() => res.json({ redirect: '/maker' })).catch((err) => {
     console.log(err);
     if (err.code === 11000) {
       return res.status(400).json({ error: 'Domo already exists.' });
@@ -36,22 +36,22 @@ const makeDomo = (request, response) => {
     return res.status(400).json({ error: 'An error occurred' });
   });
 };
-const getDomos = (request, response) => {
+const getPosts = (request, response) => {
     const req = request;
     const res = response;
 
-    return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    return Post.PostModel.findByOwner(req.session.account._id, (err, docs) => {
         if (err) {
             console.log(err);
             return res.status(400).json({ error: 'An error occurred'});
         }
 
-        return res.json({ domos: docs});
+        return res.json({ posts: docs});
     });
 };
 
 module.exports = {
   makerPage,
-  makeDomo,
-  getDomos,
+  makePost,
+  getPosts,
 };

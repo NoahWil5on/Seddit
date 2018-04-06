@@ -1,94 +1,94 @@
 "use strict";
 
-var handleDomo = function handleDomo(e) {
+var handlePost = function handlePost(e) {
     e.preventDefault();
 
-    $("#domoMessage").animate({ width: 'hide' }, 350);
+    $("#post-message").animate({ width: 'hide' }, 350);
 
-    if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
+    if ($("#post-name").val() == '' || $("#post-age").val() == '') {
         handleError("RAWR! All fields are required");
         return false;
     }
-    sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
-        loadDomosFromServer();
+    sendAjax('POST', $("#post-form").attr("action"), $("#post-form").serialize(), function () {
+        loadPostsFromServer();
     });
 
     return false;
 };
-var DomoForm = function DomoForm(props) {
+var PostForm = function PostForm(props) {
     return React.createElement(
         "form",
-        { id: "domoForm",
-            onSubmit: handleDomo,
-            name: "domoForm",
+        { id: "post-form",
+            onSubmit: handlePost,
+            name: "post-form",
             action: "/maker",
             method: "POST",
-            className: "domoForm" },
+            className: "post-form" },
         React.createElement(
             "label",
             { htmlFor: "name" },
             "Name: "
         ),
-        React.createElement("input", { id: "domoName", type: "text", name: "name", placeholder: "Domo Name" }),
+        React.createElement("input", { id: "post-age", type: "text", name: "name", placeholder: "Post Name" }),
         React.createElement(
             "label",
             { htmlFor: "age" },
             "Age: "
         ),
-        React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: "Domo Age" }),
+        React.createElement("input", { id: "post-age", type: "text", name: "age", placeholder: "Post Age" }),
         React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
-        React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
+        React.createElement("input", { className: "make-post-submit", type: "submit", value: "Make Post" })
     );
 };
-var DomoList = function DomoList(props) {
-    if (props.domos.length === 0) {
+var PostList = function PostList(props) {
+    if (props.posts.length === 0) {
         return React.createElement(
             "div",
-            { className: "domoList" },
+            { className: "post-list" },
             React.createElement(
                 "h3",
-                { className: "emptyDomo" },
-                "No Domos yet"
+                { className: "empty-post" },
+                "No Posts yet"
             )
         );
     }
-    var domoNodes = props.domos.map(function (domo) {
+    var postNodes = props.posts.map(function (post) {
         return React.createElement(
             "div",
-            { key: domo._id, className: "domo" },
-            React.createElement("img", { src: "/assets/img/domoface.jpeg", className: "domoFace", alt: "domo face" }),
+            { key: post._id, className: "post" },
+            React.createElement("img", { src: "/assets/img/domoface.jpeg", className: "post-face", alt: "post face" }),
             React.createElement(
                 "h3",
-                { className: "domoName" },
+                { className: "post-name" },
                 " Name: ",
-                domo.name,
+                post.name,
                 " "
             ),
             React.createElement(
                 "h3",
-                { className: "domoAge" },
+                { className: "post-age" },
                 " Age: ",
-                domo.age,
+                post.age,
                 " "
             )
         );
     });
     return React.createElement(
         "div",
-        { className: "domoList" },
-        domoNodes
+        { className: "post-list" },
+        postNodes
     );
 };
-var loadDomosFromServer = function loadDomosFromServer() {
-    sendAjax("GET", "/getdomos", null, function (data) {
-        ReactDOM.render(React.createElement(DomoList, { domos: data.domos }), document.querySelector('#domos'));
+var loadPostsFromServer = function loadPostsFromServer() {
+    sendAjax("GET", "/getposts", null, function (data) {
+        ReactDOM.render(React.createElement(PostList, { posts: data.posts }), document.querySelector('#posts'));
     });
 };
 var setup = function setup(csrf) {
-    ReactDOM.render(React.createElement(DomoForm, { csrf: csrf }), document.querySelector("#makeDomo"));
-    ReactDOM.render(React.createElement(DomoList, { domos: [] }), document.querySelector("#domos"));
+    ReactDOM.render(React.createElement(PostForm, { csrf: csrf }), document.querySelector("#make-post"));
+    ReactDOM.render(React.createElement(PostList, { posts: [] }), document.querySelector("#posts"));
 
-    loadDomosFromServer();
+    loadPostsFromServer();
 };
 var getToken = function getToken() {
     sendAjax("GET", '/getToken', null, function (result) {
@@ -103,11 +103,11 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
     $("#errorMessage").text(message);
-    $("#domoMessage").animate({ width: 'toggle' }, 350);
+    $("#postMessage").animate({ width: 'toggle' }, 350);
 };
 
 var redirect = function redirect(response) {
-    $("#domoMessage").animate({ width: 'hide' }, 350);
+    $("#postMessage").animate({ width: 'hide' }, 350);
     window.location = response.redirect;
 };
 
