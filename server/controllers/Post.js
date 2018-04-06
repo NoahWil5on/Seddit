@@ -15,23 +15,23 @@ const makePost = (request, response) => {
   const req = request;
   const res = response;
 
-  const age = `${req.body.age}`;
-  const name = `${req.body.name}`;
+  const title = `${req.body.title}`;
+  const text = req.body.text || '';
 
-  if (!name || !age) {
-    return res.status(400).json({ error: 'RAWR! Domo must have a name and age!' });
+  if (!title) {
+    return res.status(400).json({ error: 'All posts must have a title' });
   }
 
   const newPost = new Post.PostModel({
-    name,
-    age,
+    title,
+    text,
     owner: req.session.account._id,
   });
 
   return newPost.save().then(() => res.json({ redirect: '/maker' })).catch((err) => {
     console.log(err);
     if (err.code === 11000) {
-      return res.status(400).json({ error: 'Domo already exists.' });
+      return res.status(400).json({ error: 'Post already exists' });
     }
     return res.status(400).json({ error: 'An error occurred' });
   });

@@ -3,8 +3,8 @@ const handlePost = (e) => {
 
     $("#post-message").animate({ width: 'hide' }, 350);
 
-    if ($("#post-name").val() == '' || $("#post-age").val() == '') {
-        handleError("RAWR! All fields are required");
+    if ($("#post-title").val() == '') {
+        handleError("A title is required in order to submit");
         return false;
     }
     sendAjax('POST', $("#post-form").attr("action"), $("#post-form").serialize(), function () {
@@ -21,12 +21,10 @@ const PostForm = (props) => {
             action="/maker"
             method="POST"
             className="post-form">
-            <label htmlFor="name">Name: </label>
-            <input id="post-age" type="text" name="name" placeholder="Post Name" />
-            <label htmlFor="age">Age: </label>
-            <input id="post-age" type="text" name="age" placeholder="Post Age" />
+            <input id="post-title" type="text" name="title" placeholder="Put interesting title here" />
+            <textarea id="post-text" type="text" name="text" placeholder="More Detail(optional)"></textarea>
             <input type="hidden" name="_csrf" value={props.csrf} />
-            <input className="make-post-submit" type="submit" value="Make Post" />
+            <input className="make-post-submit" type="submit" value="Submit" />
         </form>
     );
 };
@@ -39,11 +37,53 @@ const PostList = function(props){
         );
     }
     const postNodes = props.posts.map(function(post){
+        let ad = (<div></div>);
+        // if(Math.floor(Math.random() * 3) === 1){
+        //     ad = (
+        //         <div class="add-div">
+        //             You just got an add!
+        //         </div>
+        //     )
+        // }
         return (
-            <div key={post._id} className="post">
-                <img src="/assets/img/domoface.jpeg" className="post-face" alt="post face"/>
-                <h3 className="post-name"> Name: {post.name} </h3>
-                <h3 className="post-age"> Age: {post.age} </h3>
+            <div>
+                <div key={post._id} className="post">
+                    <div className="post-header">
+                        <div className="post-image">
+                            <div className="profile-image" style={{backgroundImage: `url(./assets/img/user.png)`}}>
+                            </div>
+                        </div>
+                        <div className="post-details">
+                            <div className="post-author">Noah Wilson</div>
+                            <div className="post-date">10/20/96</div>
+                        </div>
+                    </div>
+                    <div className="post-content">
+                        <h3 className="post-title" dangerouslySetInnerHTML={{__html: post.title}}></h3>
+                    </div>         
+                    <div className="post-actions">
+                        <div className="post-actions-inner">
+                            <div className="post-vote">
+                                <div className="action-button-inner">
+                                    <div className="vote">+</div>
+                                    <div className="vote">-</div>
+                                </div>
+                            </div>
+                            <div className="post-comment-div">
+                                <div className="action-button-inner">
+                                    <div className="post-comment">5</div>
+                                    <div className="post-comment-button">MM</div>
+                                </div>
+                            </div>
+                            <div className="post-share">
+                                <div className="action-button-inner">
+                                        <div className="post-comment-button">Share</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>           
+                </div>
+                {ad}
             </div>
         );
     });

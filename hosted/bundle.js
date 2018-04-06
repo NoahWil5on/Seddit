@@ -5,8 +5,8 @@ var handlePost = function handlePost(e) {
 
     $("#post-message").animate({ width: 'hide' }, 350);
 
-    if ($("#post-name").val() == '' || $("#post-age").val() == '') {
-        handleError("RAWR! All fields are required");
+    if ($("#post-title").val() == '') {
+        handleError("A title is required in order to submit");
         return false;
     }
     sendAjax('POST', $("#post-form").attr("action"), $("#post-form").serialize(), function () {
@@ -24,20 +24,10 @@ var PostForm = function PostForm(props) {
             action: "/maker",
             method: "POST",
             className: "post-form" },
-        React.createElement(
-            "label",
-            { htmlFor: "name" },
-            "Name: "
-        ),
-        React.createElement("input", { id: "post-age", type: "text", name: "name", placeholder: "Post Name" }),
-        React.createElement(
-            "label",
-            { htmlFor: "age" },
-            "Age: "
-        ),
-        React.createElement("input", { id: "post-age", type: "text", name: "age", placeholder: "Post Age" }),
+        React.createElement("input", { id: "post-title", type: "text", name: "title", placeholder: "Put interesting title here" }),
+        React.createElement("textarea", { id: "post-text", type: "text", name: "text", placeholder: "More Detail(optional)" }),
         React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
-        React.createElement("input", { className: "make-post-submit", type: "submit", value: "Make Post" })
+        React.createElement("input", { className: "make-post-submit", type: "submit", value: "Submit" })
     );
 };
 var PostList = function PostList(props) {
@@ -53,24 +43,107 @@ var PostList = function PostList(props) {
         );
     }
     var postNodes = props.posts.map(function (post) {
+        var ad = React.createElement("div", null);
+        // if(Math.floor(Math.random() * 3) === 1){
+        //     ad = (
+        //         <div class="add-div">
+        //             You just got an add!
+        //         </div>
+        //     )
+        // }
         return React.createElement(
             "div",
-            { key: post._id, className: "post" },
-            React.createElement("img", { src: "/assets/img/domoface.jpeg", className: "post-face", alt: "post face" }),
+            null,
             React.createElement(
-                "h3",
-                { className: "post-name" },
-                " Name: ",
-                post.name,
-                " "
+                "div",
+                { key: post._id, className: "post" },
+                React.createElement(
+                    "div",
+                    { className: "post-header" },
+                    React.createElement(
+                        "div",
+                        { className: "post-image" },
+                        React.createElement("div", { className: "profile-image", style: { backgroundImage: "url(./assets/img/user.png)" } })
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "post-details" },
+                        React.createElement(
+                            "div",
+                            { className: "post-author" },
+                            "Noah Wilson"
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "post-date" },
+                            "10/20/96"
+                        )
+                    )
+                ),
+                React.createElement(
+                    "div",
+                    { className: "post-content" },
+                    React.createElement("h3", { className: "post-title", dangerouslySetInnerHTML: { __html: post.title } })
+                ),
+                React.createElement(
+                    "div",
+                    { className: "post-actions" },
+                    React.createElement(
+                        "div",
+                        { className: "post-actions-inner" },
+                        React.createElement(
+                            "div",
+                            { className: "post-vote" },
+                            React.createElement(
+                                "div",
+                                { className: "action-button-inner" },
+                                React.createElement(
+                                    "div",
+                                    { className: "vote" },
+                                    "+"
+                                ),
+                                React.createElement(
+                                    "div",
+                                    { className: "vote" },
+                                    "-"
+                                )
+                            )
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "post-comment-div" },
+                            React.createElement(
+                                "div",
+                                { className: "action-button-inner" },
+                                React.createElement(
+                                    "div",
+                                    { className: "post-comment" },
+                                    "5"
+                                ),
+                                React.createElement(
+                                    "div",
+                                    { className: "post-comment-button" },
+                                    "MM"
+                                )
+                            )
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "post-share" },
+                            React.createElement(
+                                "div",
+                                { className: "action-button-inner" },
+                                React.createElement(
+                                    "div",
+                                    { className: "post-comment-button" },
+                                    "Share"
+                                )
+                            )
+                        )
+                    )
+                )
             ),
-            React.createElement(
-                "h3",
-                { className: "post-age" },
-                " Age: ",
-                post.age,
-                " "
-            )
+            ad
         );
     });
     return React.createElement(
