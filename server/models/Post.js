@@ -42,8 +42,8 @@ PostSchema.statics.findByOwner = (ownerId, callback) => {
     const owner = { owner: convertId(ownerId) };
     return PostModel.find(owner, null, { sort: { createdData: -1 } }).limit(100).exec(callback);
 };
-PostSchema.statics.findAll = (ownerId, callback) => {
-    return PostModel.find({}, null, { sort: { createdData: -1 } }).exec(callback);
+PostSchema.statics.findAll = (callback) => {
+    return PostModel.find({}, null, { sort: { createdData: -1 } }).limit(100).exec(callback);
 };
 
 PostModel = mongoose.model('Post', PostSchema);

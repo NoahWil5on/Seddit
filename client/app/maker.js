@@ -54,8 +54,8 @@ const PostList = function(props){
                             </div>
                         </div>
                         <div className="post-details">
-                            <div className="post-author">Noah Wilson</div>
-                            <div className="post-date">10/20/96</div>
+                            <div className="post-author">Person Name</div>
+                            <div className="post-date">04/02/18</div>
                         </div>
                     </div>
                     <div className="post-content">
@@ -94,9 +94,14 @@ const PostList = function(props){
     )
 };
 const loadPostsFromServer = () => {
-    sendAjax("GET", "/getposts", null, (data) => {
+    sendAjax("GET", "/getPosts", null, (data) => {
         ReactDOM.render(
             <PostList  posts={data.posts} />,document.querySelector('#posts')
+        );
+    });
+    sendAjax("GET", "/getMyPosts", null, (data) => {
+        ReactDOM.render(
+            <PostList  posts={data.posts} />,document.querySelector('#my-posts')
         );
     });
 };
@@ -106,6 +111,9 @@ const setup = function(csrf) {
     );
     ReactDOM.render(
         <PostList posts={[]} />,document.querySelector("#posts")
+    );
+    ReactDOM.render(
+        <PostList posts={[]} />,document.querySelector("#my-posts")
     );
 
     loadPostsFromServer();

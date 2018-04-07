@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Seddit</title>
+  <title>Seddit | Main</title>
   <script crossorigin src="https://unpkg.com/react@15/dist/react.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
   <script crossorigin src="https://unpkg.com/prop-types/prop-types.min.js"></script>
@@ -16,8 +16,22 @@
   <nav>
         <div id="nav-div">
             <div id="nav-inner">
-                <a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
-                <div class="navlink"><a href="/logout">Log out</a></div>
+                <div class="center-div" style="white-space: nowrap; vertical-align: middle;">
+                    <a href="#"><div id="logo" style="background-image: url('./assets/img/user.png')"></div></a>
+                    <p id="nav-header-profile">User Name</p>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+            <div id="nav-options">
+                <div class="nav-option-div active">
+                    <a class="nav-option-text" href="">Home</a>
+                </div>
+                <div class="nav-option-div">
+                    <a class="nav-option-text" href="/profile">Profile</a>
+                </div>
+                <div class="nav-option-div">
+                    <a class="nav-option-text" href="/logout">Log Out</a>
+                </div>
             </div>
         </div>
   </nav>

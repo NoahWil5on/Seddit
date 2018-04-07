@@ -71,12 +71,12 @@ var PostList = function PostList(props) {
                         React.createElement(
                             "div",
                             { className: "post-author" },
-                            "Noah Wilson"
+                            "Person Name"
                         ),
                         React.createElement(
                             "div",
                             { className: "post-date" },
-                            "10/20/96"
+                            "04/02/18"
                         )
                     )
                 ),
@@ -153,13 +153,17 @@ var PostList = function PostList(props) {
     );
 };
 var loadPostsFromServer = function loadPostsFromServer() {
-    sendAjax("GET", "/getposts", null, function (data) {
+    sendAjax("GET", "/getPosts", null, function (data) {
         ReactDOM.render(React.createElement(PostList, { posts: data.posts }), document.querySelector('#posts'));
+    });
+    sendAjax("GET", "/getMyPosts", null, function (data) {
+        ReactDOM.render(React.createElement(PostList, { posts: data.posts }), document.querySelector('#my-posts'));
     });
 };
 var setup = function setup(csrf) {
     ReactDOM.render(React.createElement(PostForm, { csrf: csrf }), document.querySelector("#make-post"));
     ReactDOM.render(React.createElement(PostList, { posts: [] }), document.querySelector("#posts"));
+    ReactDOM.render(React.createElement(PostList, { posts: [] }), document.querySelector("#my-posts"));
 
     loadPostsFromServer();
 };
@@ -175,8 +179,8 @@ $(document).ready(function () {
 "use strict";
 
 var handleError = function handleError(message) {
-    $("#errorMessage").text(message);
-    $("#postMessage").animate({ width: 'toggle' }, 350);
+    // $("#errorMessage").text(message);
+    // $("#postMessage").animate({width:'toggle'}, 350);
 };
 
 var redirect = function redirect(response) {

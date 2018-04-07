@@ -1,8 +1,18 @@
 const models = require('../models');
 const Post = models.Post;
 
+const profilePage = (req, res) => {
+    Post.PostModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.render('profile', { csrfToken: req.csrfToken(), post: docs });
+  });
+};
 const makerPage = (req, res) => {
-    Post.PostModel.findAll(req.session.account._id, (err, docs) => {
+    Post.PostModel.findAll((err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
@@ -36,11 +46,25 @@ const makePost = (request, response) => {
     return res.status(400).json({ error: 'An error occurred' });
   });
 };
+//req.session.account._id,
+const getMyPosts = (request, response) => {
+    const req = request;
+    const res = response;
+
+    Post.PostModel.findByOwner(req.session.account._id, (err, docs) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).json({ error: 'An error occurred'});
+        }
+
+        return res.json({ posts: docs});
+    });
+}
 const getPosts = (request, response) => {
     const req = request;
     const res = response;
 
-    return Post.PostModel.findByOwner(req.session.account._id, (err, docs) => {
+    return Post.PostModel.findAll((err, docs) => {
         if (err) {
             console.log(err);
             return res.status(400).json({ error: 'An error occurred'});
@@ -51,6 +75,8 @@ const getPosts = (request, response) => {
 };
 
 module.exports = {
+    profilePage,
+    getMyPosts,
   makerPage,
   makePost,
   getPosts,
