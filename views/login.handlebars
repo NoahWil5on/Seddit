@@ -23,10 +23,12 @@
             <div style="clear:both"></div>
             <div id="nav-options">
                 <div class="nav-option-div">
-                    <a id="loginButton" class="nav-option-text" href="/login">Log in</a>
+                    <p>Login</p>
+                    <a id="loginButton" class="nav-option-text" href="/login"></a>
                 </div>
                 <div class="nav-option-div">
-                    <a id="signupButton" class="nav-option-text" href="/signup">Sign Up</a>
+                    <p>Sign Up</p>
+                    <a id="signupButton" class="nav-option-text" href="/signup"></a>
                 </div>
             </div>
         </div>
@@ -34,9 +36,10 @@
   <div id="main">
     <section id="content"></section>
   </div>
-
-  <div id="post-message"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage">Wrong username or password</span></h3><img id="post" src="assets/img/domo.png" alt="domo"/>
+  <div id="error-message-div">
+      <div style="position: relative; width: 100%; height: 100%">
+        <p id="error-message"></p>
+      </div>
   </div>
   <script src="/assets/loginBundle.js"></script>
 </body>

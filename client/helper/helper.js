@@ -1,10 +1,14 @@
 const handleError = (message) => {
-    // $("#errorMessage").text(message);
-    // $("#postMessage").animate({width:'toggle'}, 350);
+    $("#error-message").text(message);
+    $("#error-message-div").animate({bottom:'toggle'}, 350, () => {
+        setTimeout(() => {
+            $("#error-message-div").animate({bottom:'toggle'}, 350);
+        }, 2000);
+    });
 };
 
 const redirect = (response) => {
-    $("#postMessage").animate({width:'hide'},350);
+    $("#message").animate({width:'hide'},350);
     window.location = response.redirect;
 };
 

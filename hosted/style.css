@@ -89,9 +89,17 @@ nav:nth-child(1) {
     transition: background-color 0.8s ease;
     background-color: #66bdff;
 }
+.hidden{
+    display: none;
+}
+
 #nav-options{
     position: relative;
     width: 100%;
+}
+.nav-center{
+    white-space: nowrap; 
+    vertical-align: middle;
 }
 .nav-option-div{
     position: relative;
@@ -103,7 +111,7 @@ nav:nth-child(1) {
 }
 .nav-option-div:hover{
     transition: background-color 0.5s ease;
-    background-color: #d6edff;
+    background-color: #ffd7bd;
     cursor: pointer;
 }
 .nav-option-div a{
@@ -111,20 +119,34 @@ nav:nth-child(1) {
     text-align: center;
     text-decoration: none;
     color: #444;
+    pointer-events: all;
 }
-.nav-option-text{
+.nav-option-div p{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 20pt;
     font-weight: bold;
+    pointer-events: none;
+    z-index: 10;
+    white-space: nowrap;
+}
+.nav-option-text{
+    position: relative;
+    display: block;
     width:100%;
-    text-align: center;
+    height: 100%;
+}
+#nav-header{
+    cursor: auto;
+}
+#nav-header:hover{
+    cursor: pointer;
 }
 .active{
     transition: background-color 0.5s ease;
-    background-color: #ffd7bd;
+    background-color: #d6edff;
     cursor: pointer;
 }
 .center-div{
@@ -133,6 +155,12 @@ nav:nth-child(1) {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+.center-div a{
+    margin-right: 10px;
+    pointer-events: none;
+    position: inline-block;
+    vertical-align: middle;
 }
 
 .post-form {
@@ -308,14 +336,7 @@ nav:nth-child(1) {
     z-index:300;
 }
 
-#errorMessage {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: red;
-    font-style: italic;
-}
-
-#post {
+#message {
     z-index: 225;
     margin-top: -20px;
     margin-left: 135px;
@@ -326,12 +347,14 @@ nav:nth-child(1) {
     transform: rotate(330deg);
 }
 
-#posts {
+#posts, #my-posts {
     width: 80%;
     min-width: 400px;
     max-width: 750px;
     margin: 0 auto;
     margin-top: 40px;
+}
+.post-list{
     margin-bottom: 200px;
 }
 
@@ -470,4 +493,89 @@ h3.empty-post {
 
 .post:last-child {
     margin-bottom:10px;
+}
+#app-comments{
+    width: 90%;
+    margin: 0 auto;
+}
+input[type="hidden"]{
+    display:inline-block;
+}
+#make-comment{
+    position: fixed;
+    bottom: 0;
+}
+.comment-form{
+    text-align: center;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding: 20px;
+    background-color: #e95d32; 
+}
+#comment-text{
+    position: relative;
+    padding: 3px;
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(100% - 200px);
+    min-width: 300px;
+    font-size: 14pt;
+    resize: none;
+    border: none;
+}
+.make-comment-submit {
+    text-align: center;;
+    position: relative;
+    margin-left: 20px;
+    font-size: 16pt;
+    display: inline-block;
+    background-color: #4d4d4d;
+    outline: none;
+    border: none;
+    border-radius: 3px;
+    padding: 5 10px;
+    color: white;
+    text-decoration: none;
+    vertical-align: middle;
+}
+.make-comment-submit:hover{
+    -webkit-box-shadow:inset 0px 0px 0px 1px #fff;
+    -moz-box-shadow:inset 0px 0px 0px 1px #fff;
+    box-shadow:inset 0px 0px 0px 1px #fff;
+    cursor: pointer;
+}
+.main-header{
+    background-color: #ffeae3 !important; 
+}
+.main-post{
+    margin-bottom: 40px !important;
+}
+.comment-post{
+    margin-bottom: 10px !important;
+}
+#error-message-div{
+    z-index: 100;
+    width: 80%;
+    max-width: 600px;
+    height: 50px;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 80px);
+    bottom: 100px;
+    border-radius: 3px;
+    background-color: #31333a;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5);
+}
+#error-message{
+    width: 80%;
+    text-align: center;
+    position: absolute;
+    font-size: 14pt;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
 }

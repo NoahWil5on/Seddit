@@ -3,10 +3,10 @@
 var handleLogin = function handleLogin(e) {
     e.preventDefault();
 
-    $("#post-message").animate({ width: 'hide' }, 350);
+    $("#error-message-div").animate({ bottom: 'hide' }, 350);
 
     if ($("#user").val() == '' || $("#pass").val() == '') {
-        handleError("RAWR! Username or password is empty");
+        handleError("Username or password is empty");
         return false;
     }
 
@@ -19,15 +19,15 @@ var handleLogin = function handleLogin(e) {
 var handleSignup = function handleSignup(e) {
     e.preventDefault();
 
-    $("#post-message").animate({ width: 'hide' }, 350);
+    $("#error-message-div").animate({ bottom: 'hide' }, 350);
 
     if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-        handleError("RAWR! All fields are required");
+        handleError("All fields are required");
         return false;
     }
 
     if ($("#pass").val() !== $("#pass2").val()) {
-        handleError("RAWR! Passwords do not match");
+        handleError("Passwords do not match");
         return false;
     }
 
@@ -122,22 +122,27 @@ var setup = function setup(csrf) {
 };
 var getToken = function getToken() {
     sendAjax("GET", '/getToken', null, function (result) {
-        setup(result.csrfToken);
+        setup(result.token.csrfToken);
     });
 };
 
 $(document).ready(function () {
+    $("#error-message-div").animate({ bottom: 'hide' }, 0);
     getToken();
 });
 "use strict";
 
 var handleError = function handleError(message) {
-    // $("#errorMessage").text(message);
-    // $("#postMessage").animate({width:'toggle'}, 350);
+    $("#error-message").text(message);
+    $("#error-message-div").animate({ bottom: 'toggle' }, 350, function () {
+        setTimeout(function () {
+            $("#error-message-div").animate({ bottom: 'toggle' }, 350);
+        }, 2000);
+    });
 };
 
 var redirect = function redirect(response) {
-    $("#postMessage").animate({ width: 'hide' }, 350);
+    $("#message").animate({ width: 'hide' }, 350);
     window.location = response.redirect;
 };
 

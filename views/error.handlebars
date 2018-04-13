@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Seddit | Profile</title>
+  <title>Seddit</title>
   <script crossorigin src="https://unpkg.com/react@15/dist/react.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
   <script crossorigin src="https://unpkg.com/prop-types/prop-types.min.js"></script>
@@ -12,36 +12,35 @@
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
-<body>
-  <nav>
+<body> 
+<nav>
         <div id="nav-div">
             <div id="nav-inner">
                 <div class="center-div" style="white-space: nowrap; vertical-align: middle;">
-                    <a href="#"><div id="logo" style="background-image: url('./assets/img/user.png')"></div></a>
-                    <p id="nav-header-profile">User Name</p>
+                    <p id="nav-header-profile">Seddit</p>
                 </div>
             </div>
             <div style="clear:both"></div>
             <div id="nav-options">
                 <div class="nav-option-div">
-                    <a class="nav-option-text" href="/maker">Home</a>
-                </div>
-                <div class="nav-option-div active">
-                    <a class="nav-option-text" href="">Profile</a>
+                    <a id="loginButton" class="nav-option-text" href="/login">Log in</a>
                 </div>
                 <div class="nav-option-div">
-                    <a class="nav-option-text" href="/logout">Log Out</a>
+                    <a id="signupButton" class="nav-option-text" href="/signup">Sign Up</a>
                 </div>
             </div>
         </div>
   </nav>
   <div id="main">
-    <section id="my-posts">
-    </section>
+      <div style="padding: 20px">
+        <h1>404</h1>
+        <h2>It appears you may have strayed from the path a bit</h2>
+        <a href="/" style="color: black; margin-top: 10px; display: block;">Go Home</a>
+    </div>
   </div>
+
   <div id="post-message"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3><img id="post" src="assets/img/domo.png" alt="domo"/>
+    <h3><span id="errorMessage">Wrong username or password</span></h3><img id="post" src="assets/img/domo.png" alt="domo"/>
   </div>
-  <script src="/assets/bundle.js"></script>
 </body>
 </html>

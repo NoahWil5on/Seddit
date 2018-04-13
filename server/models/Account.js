@@ -24,6 +24,10 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  lastPost: {
+    type: Date,
+    default: Date.now,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
@@ -33,6 +37,7 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.statics.toAPI = doc => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
+  lastPost: doc.lastPost,
   _id: doc._id,
 });
 
