@@ -5,9 +5,10 @@ mongoose.Promise = global.Promise;
 
 let AccountModel = {};
 const iterations = 10000;
-const saltLength = 64;
+const saltLength = 64; // salt strength is not nearly salty enough
 const keyLength = 64;
 
+// account data model
 const AccountSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -33,7 +34,7 @@ const AccountSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
+// get object to attach to session api
 AccountSchema.statics.toAPI = doc => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
@@ -41,9 +42,11 @@ AccountSchema.statics.toAPI = doc => ({
   _id: doc._id,
 });
 
+// make sure password is correct
 const validatePassword = (doc, password, callback) => {
   const pass = doc.password;
 
+  // do the hackerman password detection
   return crypto.pbkdf2(password, doc.salt, iterations, keyLength, 'RSA-SHA512', (err, hash) => {
     if (hash.toString('hex') !== pass) {
       return callback(false);
@@ -51,6 +54,7 @@ const validatePassword = (doc, password, callback) => {
     return callback(true);
   });
 };
+// find a single user by username
 AccountSchema.statics.findByUsername = (name, callback) => {
   const search = {
     username: name,
@@ -58,7 +62,7 @@ AccountSchema.statics.findByUsername = (name, callback) => {
 
   return AccountModel.findOne(search, callback);
 };
-
+// make a hash with password, McDonalds salt, and other password stuff
 AccountSchema.statics.generateHash = (password, callback) => {
   const salt = crypto.randomBytes(saltLength);
 
@@ -66,13 +70,14 @@ AccountSchema.statics.generateHash = (password, callback) => {
     callback(salt, hash.toString('hex'))
   );
 };
-
+// see if user is the right user
 AccountSchema.statics.authenticate = (username, password, callback) =>
 AccountModel.findByUsername(username, (err, doc) => {
   if (err) {
     return callback(err);
   }
 
+  // does this user even exist?
   if (!doc) {
     return callback();
   }
@@ -86,7 +91,9 @@ AccountModel.findByUsername(username, (err, doc) => {
   });
 });
 
+// use account schema to model account
 AccountModel = mongoose.model('Account', AccountSchema);
 
+// export module components
 module.exports.AccountModel = AccountModel;
 module.exports.AccountSchema = AccountSchema;

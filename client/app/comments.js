@@ -1,12 +1,16 @@
+//single post
 const Post = function(props){
-    if(props.post === {}){
+    //if there is no post let the user know
+    if(!props.post){
         return (
             <div className="post-list">
                 <h3 className="empty-post">This post doesn't seem to exist</h3>
             </div>
         );
     }
+    //get date string
     var date = getDate(props.post.createdData);
+    //return a properly formatted post
     return (
         <div>
             <div className="post main-post">
@@ -26,8 +30,12 @@ const Post = function(props){
                     <div className="post-actions-inner">
                         <div className="post-vote">
                             <div className="action-button-inner">
-                                <div className="vote">+</div>
-                                <div className="vote">-</div>
+                                    <div className="vote">
+                                        <i className="material-icons">sentiment_very_satisfied</i>
+                                    </div>
+                                    <div className="vote">
+                                        <i className="material-icons">sentiment_very_dissatisfied</i>
+                                    </div>
                             </div>
                         </div>
                         <div className="post-share">
@@ -41,6 +49,7 @@ const Post = function(props){
         </div>
     );
 }
+//returns all comment nodes
 const commentNodes = function(props){
     return props.comments.map(function(comment){
         var date = getDate(comment.createdData);
@@ -61,7 +70,9 @@ const commentNodes = function(props){
         );
     });
 }
+//creates list of all comments related to this post
 const CommentList = function(props){
+    //if there are no comments let user know
     if(props.comments.length === 0){
         return (
             <div className="post-list">
@@ -69,6 +80,7 @@ const CommentList = function(props){
             </div>
         );
     }
+    //otherwise fill div with comments
     const comments = commentNodes(props);
     return (
         <div className="post-list">
@@ -76,7 +88,9 @@ const CommentList = function(props){
         </div>
     );
 }
+//for to create new comment
 const CommentForm = function(props){
+    //get info about current post
     var myUrl = new URL(window.location.href);
     var _id = myUrl.searchParams.get('post');
     return (
@@ -93,15 +107,18 @@ const CommentForm = function(props){
         </form>
     );
 }
+//do post comment
 const postComment = (e) => {
     e.preventDefault();
 
     $("#error-message-div").animate({bottom:'hide'}, 350);
 
+    //make sure post is valid
     if ($("#comment-text").val() == '') {
         handleError("Text is required in order to comment");
         return false;
     }
+    //if post is valid then do post
     sendAjax('POST', $("#comment-form").attr("action"), $("#comment-form").serialize(), function () {
         loadDataFromServer();
     });

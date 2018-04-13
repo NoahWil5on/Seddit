@@ -357,7 +357,9 @@ nav:nth-child(1) {
 .post-list{
     margin-bottom: 200px;
 }
-
+.ad-div img{
+    width: 100%;
+}
 .post {
     position: relative;
     margin: 0 auto;
@@ -464,6 +466,8 @@ nav:nth-child(1) {
     color: #888;
 }
 .post-comment-button{
+    font-weight: bold;
+    font: sans-serif;
     display: inline-block;
     padding: 5px 10px;
 }

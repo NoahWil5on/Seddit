@@ -1,5 +1,6 @@
 let state;
 
+//figure out what page the user is on.
 function appSetup() {
     var myUrl = new URL(window.location.href);
     var location = myUrl.searchParams.get('location');
@@ -9,6 +10,7 @@ function appSetup() {
         state = location;
     }
 }
+//make a formatted date string
 function getDate(dateObject){
     var date = new Date(dateObject);
     var month = date.getMonth();
@@ -19,6 +21,7 @@ function getDate(dateObject){
 }
 
 //https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+//copy text to your clipboard
 function copyPost(id, e){
     var text = window.location.href;
     if(state !== 'comments'){
@@ -48,18 +51,17 @@ function copyPost(id, e){
         }
     }
 }
+//go to post page of specific id
 function goToPost(id, e){
     var url = window.location.href.split('?')[0];
     url += `?location=comments&post=${id}`;
     window.location.href = url;
 }
+//go to profile page
 function profile(){
     var url = window.location.href.split('?')[0];
     url += '?location=profile';
     window.location.href = url;
 }
-function init() {
-    
-}
+//wait for window to do stuff
 window.onload = appSetup();
-window.onload = init;

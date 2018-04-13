@@ -1,3 +1,4 @@
+//creates navigation menu
 const Nav = function(props){
     return (
         <div>
@@ -27,18 +28,22 @@ const Nav = function(props){
         </div>
     );
 }
+//create post (and ad) components
 const postNodes = function(props){
     return props.posts.map(function(post){
         var date = getDate(post.createdData);
 
+        //randomly creates add
         let ad = (<div></div>);
-        // if(Math.floor(Math.random() * 3) === 1){
-        //     ad = (
-        //         <div class="add-div">
-        //             You just got an add!
-        //         </div>
-        //     )
-        // }
+        if(Math.floor(Math.random() * 3) === 1){
+            let pizzaImage = getRandomImage();
+            ad = (
+                <div className="ad-div">
+                   <img src={pizzaImage} alt="fake ad" />
+                </div>
+            )
+        }
+        //creates post
         return (
             <div key={post._id}>
                 <div className="post">
@@ -59,15 +64,19 @@ const postNodes = function(props){
                         <div className="post-actions-inner">
                             <div className="post-vote">
                                 <div className="action-button-inner">
-                                    <div className="vote">+</div>
-                                    <div className="vote">-</div>
+                                    <div className="vote">
+                                        <i className="material-icons">sentiment_very_satisfied</i>
+                                    </div>
+                                    <div className="vote">
+                                        <i className="material-icons">sentiment_very_dissatisfied</i>
+                                    </div>
                                 </div>
                             </div>
                             <div className="post-comment-div">
                                 <div className="action-button-inner">
-                                    <div className="post-comment">5</div>
-                                    <div className="post-comment-button" onClick={goToPost.bind(this, post._id)}>MM</div>
-                                </div>
+                                    <div className="post-comment-button" onClick={goToPost.bind(this, post._id)}>
+                                        <i className="material-icons">comment</i></div>
+                                    </div>
                             </div>
                             <div className="post-share">
                                 <div className="action-button-inner">
@@ -82,9 +91,11 @@ const postNodes = function(props){
         );
     });
 }
+//get data from server based on state
 const loadDataFromServer = () => {
     switch(state){
         case 'home':
+        //get all posts from server
             sendAjax("GET", "/getPosts", null, (data) => {
                 ReactDOM.render(
                     <PostList posts={data.posts} />,document.querySelector('#posts')
@@ -95,12 +106,14 @@ const loadDataFromServer = () => {
         case 'comments':
             var myUrl = new URL(window.location.href);
             var post = myUrl.searchParams.get('post');
+            //get specific post from server
             sendAjax("GET", `/getPost?post=${post}`, null, (data) => {
                 ReactDOM.render(
                     <Post post={data.post} />,document.querySelector('#post')
                 );
                 $("#comment-form").find("input[type=text], textarea").val("");
             });
+            //get all comments from specific post
             sendAjax("GET", `/getComments?post=${post}`, null, (data) => {
                 ReactDOM.render(
                     <CommentList comments={data.comments} />,document.querySelector('#comments')
@@ -109,6 +122,7 @@ const loadDataFromServer = () => {
             });
             break;
         case 'profile':
+        //get all of this user's posts
             sendAjax("GET", "/getMyPosts", null, (data) => {
                 ReactDOM.render(
                     <MyPostList posts={data.posts} />,document.querySelector('#my-posts')
@@ -119,6 +133,7 @@ const loadDataFromServer = () => {
             break;
     }
 };
+//set links and styles of the navigation menu
 const setupNav = () => {
     var home = document.getElementById('home');
     var profile = document.getElementById('profile');
@@ -140,39 +155,48 @@ const setupNav = () => {
             break;
     }
 }
+//create empty components ready to be filled 
 const setup = function(csrf, username) {
     ReactDOM.render(
         <Nav name={username} />,document.querySelector("#nav-div")
     );
     setupNav();
+    //only set up the components for the page we're on
     switch(state){
         case 'home':
+        //make post form
             ReactDOM.render(
                 <PostForm csrf={csrf} />,document.querySelector("#make-post")
             );
+        //all posts
             ReactDOM.render(
                 <PostList posts={[]} />,document.querySelector("#posts")
             );
             break;
         case 'comments':
+        //single post
             ReactDOM.render(
                 <Post post={{}} />,document.querySelector("#post")
             );
+        //make comment form
             ReactDOM.render(
                 <CommentForm csrf={csrf} />,document.querySelector("#make-comment")
             );
+        //list of all comments related to specific post
             ReactDOM.render(
                 <CommentList comments={[]} />,document.querySelector('#comments')
             );
             var new_width = $('#main').width();
             $('#make-comment').width(new_width); 
 
+            //resize comment form if window is resized
             $( window ).resize(function() {
                 new_width = $('#main').width();
                 $('#make-comment').width(new_width);
             });
             break;
         case 'profile':
+        //all of my posts
             ReactDOM.render(
                 <MyPostList posts={[]} />,document.querySelector("#my-posts")
             );
@@ -180,14 +204,16 @@ const setup = function(csrf, username) {
         default:
             break;
     }
+    //actually get data
     loadDataFromServer();
 };
+//get csrf token to help prevent against malicious activity
 const getToken = () => {
     sendAjax("GET", '/getToken', null, (result) => {
         setup(result.token.csrfToken, result.name);
     });
 };
-
+//when document is ready setup tokens/page components and set error message toast to hidden
 $(document).ready(function() {
     $("#error-message-div").animate({bottom:'hide'}, 0);
     getToken();

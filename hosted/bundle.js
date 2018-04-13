@@ -60,13 +60,14 @@ var postNodes = function postNodes(props) {
         var date = getDate(post.createdData);
 
         var ad = React.createElement("div", null);
-        // if(Math.floor(Math.random() * 3) === 1){
-        //     ad = (
-        //         <div class="add-div">
-        //             You just got an add!
-        //         </div>
-        //     )
-        // }
+        if (Math.floor(Math.random() * 3) === 1) {
+            var pizzaImage = getRandomImage();
+            ad = React.createElement(
+                "div",
+                { className: "ad-div" },
+                React.createElement("img", { src: pizzaImage, alt: "fake ad" })
+            );
+        }
         return React.createElement(
             "div",
             { key: post._id },
@@ -112,12 +113,20 @@ var postNodes = function postNodes(props) {
                                 React.createElement(
                                     "div",
                                     { className: "vote" },
-                                    "+"
+                                    React.createElement(
+                                        "i",
+                                        { className: "material-icons" },
+                                        "sentiment_very_satisfied"
+                                    )
                                 ),
                                 React.createElement(
                                     "div",
                                     { className: "vote" },
-                                    "-"
+                                    React.createElement(
+                                        "i",
+                                        { className: "material-icons" },
+                                        "sentiment_very_dissatisfied"
+                                    )
                                 )
                             )
                         ),
@@ -129,13 +138,12 @@ var postNodes = function postNodes(props) {
                                 { className: "action-button-inner" },
                                 React.createElement(
                                     "div",
-                                    { className: "post-comment" },
-                                    "5"
-                                ),
-                                React.createElement(
-                                    "div",
                                     { className: "post-comment-button", onClick: goToPost.bind(this, post._id) },
-                                    "MM"
+                                    React.createElement(
+                                        "i",
+                                        { className: "material-icons" },
+                                        "comment"
+                                    )
                                 )
                             )
                         ),
@@ -304,12 +312,20 @@ var Post = function Post(props) {
                             React.createElement(
                                 "div",
                                 { className: "vote" },
-                                "+"
+                                React.createElement(
+                                    "i",
+                                    { className: "material-icons" },
+                                    "sentiment_very_satisfied"
+                                )
                             ),
                             React.createElement(
                                 "div",
                                 { className: "vote" },
-                                "-"
+                                React.createElement(
+                                    "i",
+                                    { className: "material-icons" },
+                                    "sentiment_very_dissatisfied"
+                                )
                             )
                         )
                     ),
@@ -512,4 +528,9 @@ var sendAjax = function sendAjax(type, action, data, success) {
             handleError(messageObj.error);
         }
     });
+};
+var getRandomImage = function getRandomImage() {
+    var images = ['pizza_ad_00.jpg', 'pizza_ad_01.jpg', 'pizza_ad_02.png', 'pizza_ad_03.jpg', 'pizza_ad_04.jpg', 'pizza_ad_05.jpg', 'pizza_ad_06.jpg'];
+    var image = images[Math.floor(Math.random() * images.length)];
+    return "./assets/img/" + image;
 };

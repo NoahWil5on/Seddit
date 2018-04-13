@@ -1,4 +1,6 @@
+//make component to hold all posts by specific user
 const MyPostList = function(props){
+    //if the user hasn't posted anything let them know
     if(props.posts.length === 0){
         return (
             <div className="post-list">

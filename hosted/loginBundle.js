@@ -160,3 +160,8 @@ var sendAjax = function sendAjax(type, action, data, success) {
         }
     });
 };
+var getRandomImage = function getRandomImage() {
+    var images = ['pizza_ad_00.jpg', 'pizza_ad_01.jpg', 'pizza_ad_02.png', 'pizza_ad_03.jpg', 'pizza_ad_04.jpg', 'pizza_ad_05.jpg', 'pizza_ad_06.jpg'];
+    var image = images[Math.floor(Math.random() * images.length)];
+    return "./assets/img/" + image;
+};
