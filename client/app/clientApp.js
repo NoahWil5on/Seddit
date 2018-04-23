@@ -1,3 +1,6 @@
+var myCSRF;
+var myUsername;
+
 //creates navigation menu
 const Nav = function(props){
     return (
@@ -35,7 +38,7 @@ const postNodes = function(props){
 
         //randomly creates add
         let ad = (<div></div>);
-        if(Math.floor(Math.random() * 3) === 1){
+        if(Math.floor(Math.random() * 3) === -1){
             let pizzaImage = getRandomImage();
             ad = (
                 <div className="ad-div">
@@ -43,6 +46,15 @@ const postNodes = function(props){
                 </div>
             )
         }
+        post.myVal = 0;
+        for(var i = 0; i < post.voters.length; i++){
+            if(post.voters[i].voter === myUsername){
+                post.myVal = post.voters[i].value;
+                break;
+            }
+        }
+        
+
         //creates post
         return (
             <div key={post._id}>
@@ -64,11 +76,14 @@ const postNodes = function(props){
                         <div className="post-actions-inner">
                             <div className="post-vote">
                                 <div className="action-button-inner">
-                                    <div className="vote">
-                                        <i className="material-icons">sentiment_very_satisfied</i>
+                                    <div className="vote" onClick={(e) => doVote(post, 1, 'post', e)}>
+                                        <i className={`material-icons${post.myVal === 1 ? ' highlight' : ''}`}>sentiment_very_satisfied</i>
                                     </div>
-                                    <div className="vote">
-                                        <i className="material-icons">sentiment_very_dissatisfied</i>
+                                    <div className="vote" onClick={(e) => doVote(post, -1, 'post', e)}>
+                                        <i className={`material-icons${post.myVal === -1 ? ' highlight' : ''}`}>sentiment_very_dissatisfied</i>
+                                    </div>
+                                    <div className="rating">
+                                        <p>{post.rating}</p>
                                     </div>
                                 </div>
                             </div>
@@ -97,8 +112,13 @@ const loadDataFromServer = () => {
         case 'home':
         //get all posts from server
             sendAjax("GET", "/getPosts", null, (data) => {
+                // setInterval(() => {
+                //     data.posts[0].rating++;
+                //     console.log(data.posts[0].rating);
+                // }, 2000);
+
                 ReactDOM.render(
-                    <PostList posts={data.posts} />,document.querySelector('#posts')
+                    <PostList posts={data.posts}/>,document.querySelector('#posts')
                 );
                 $("#post-form").find("input[type=text], textarea").val("");
             });
@@ -119,13 +139,17 @@ const loadDataFromServer = () => {
                     <CommentList comments={data.comments} />,document.querySelector('#comments')
                 );
                 $("#comment-form").find("input[type=text], textarea").val("");
+                if(commentID != undefined){
+                    var mainComment = document.getElementsByClassName('comment-highlight')[0];
+                    window.scrollTo(0,mainComment.parentElement.getBoundingClientRect().top);
+                }
             });
             break;
         case 'profile':
         //get all of this user's posts
             sendAjax("GET", "/getMyPosts", null, (data) => {
                 ReactDOM.render(
-                    <MyPostList posts={data.posts} />,document.querySelector('#my-posts')
+                    <MyPostList posts={data.posts}/>,document.querySelector('#my-posts')
                 );
             });
             break;
@@ -157,6 +181,8 @@ const setupNav = () => {
 }
 //create empty components ready to be filled 
 const setup = function(csrf, username) {
+    myUsername = username;
+
     ReactDOM.render(
         <Nav name={username} />,document.querySelector("#nav-div")
     );
@@ -170,7 +196,7 @@ const setup = function(csrf, username) {
             );
         //all posts
             ReactDOM.render(
-                <PostList posts={[]} />,document.querySelector("#posts")
+                <PostList posts={[]}/>,document.querySelector("#posts")
             );
             break;
         case 'comments':
@@ -205,11 +231,12 @@ const setup = function(csrf, username) {
             break;
     }
     //actually get data
-    loadDataFromServer();
+    loadDataFromServer(csrf);
 };
 //get csrf token to help prevent against malicious activity
 const getToken = () => {
     sendAjax("GET", '/getToken', null, (result) => {
+        myCSRF = result.token.csrfToken;
         setup(result.token.csrfToken, result.name);
     });
 };

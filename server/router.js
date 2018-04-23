@@ -25,6 +25,10 @@ const router = (app) => {
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
+  // voting
+  app.post('/vote', mid.requiresLogin, controllers.Post.doVote);
+  app.post('/voteComment', mid.requiresLogin, controllers.Comment.doVote);
+
     // empty url
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 

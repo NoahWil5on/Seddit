@@ -34,16 +34,27 @@ const PostSchema = new mongoose.Schema({
     required: true,
     ref: 'Account',
   },
-  vote: {
+  voters: [{
+    voter: {
+      type: String,
+      required: true,
+    },
+    value: {
+      type: Number,
+      default: 0,
+    },
+  }],
+  rating: {
     type: Number,
-    required: true,
     default: 0,
   },
   createdData: {
     type: Date,
     default: Date.now,
   },
-});
+},
+{ usePushEach: true }
+);
 // make post object that can be used by session
 PostSchema.statics.toAPI = (doc) => ({
   author: doc.author,
@@ -64,6 +75,14 @@ PostSchema.statics.findById = (id, callback) => {
 PostSchema.statics.findAll = function (callback) {
   return PostModel.find({}, null, { sort: { createdData: -1 } }).limit(100).exec(callback);
 };
+// find a single post by the post's id
+// PostSchema.statics.findVoter = (id, username, callback) => {
+//     const voter = { '$and' : [
+//         {voters: { '$in' : [{voter: username}] } },
+//         {_id: convertId(id) },
+//     ]};
+//     return PostModel.findOne(voter, callback);
+// };
 // model post based on PostSchema
 PostModel = mongoose.model('Post', PostSchema);
 

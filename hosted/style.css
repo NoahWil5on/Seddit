@@ -1,3 +1,8 @@
+@keyframes highlightComment {
+    0% {background-color: rgb(255, 224, 210);}
+    75% {background-color: rgb(255, 224, 210);}
+    100% {background-color: rgb(255, 255, 255);}
+}
 *{
     margin: 0;
     padding: 0;
@@ -446,12 +451,29 @@ nav:nth-child(1) {
     width: 30px;
     padding-top: 5px;
     padding-bottom: 5px;
+    vertical-align: center;
+}
+.rating{
+    display: inline-block;
+    text-align: center;
+    width: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 16pt;
+    vertical-align: top;
+    color: #e95d32;
+}
+.highlight{
+    color: #e95d32;
 }
 .vote:hover{
     transition: background-color .5s ease-out;
     background-color: #666;
     color: white;
     cursor: pointer;
+}
+.vote i{
+    pointer-events: none;
 }
 .post-comment-div{
     border-right: solid 1px #ccc;
@@ -550,7 +572,7 @@ input[type="hidden"]{
     cursor: pointer;
 }
 .main-header{
-    background-color: #ffeae3 !important; 
+    background-color: #dff0ff !important; 
 }
 .main-post{
     margin-bottom: 40px !important;
@@ -582,4 +604,12 @@ input[type="hidden"]{
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
+}
+#comments{
+    margin-left: 40px;
+}
+.comment-highlight{
+    background-color: white;
+    animation-name: highlightComment;
+    animation-duration: 4s;
 }

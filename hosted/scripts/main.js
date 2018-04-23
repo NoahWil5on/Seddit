@@ -1,4 +1,5 @@
 let state;
+let commentID = undefined;
 
 //figure out what page the user is on.
 function appSetup() {
@@ -8,6 +9,11 @@ function appSetup() {
         state = 'home';
     } else {
         state = location;
+    }
+
+    comment = myUrl.searchParams.get('comment');
+    if (comment && comment !== undefined) {
+        commentID = `${comment}`;
     }
 }
 //make a formatted date string
@@ -22,12 +28,35 @@ function getDate(dateObject){
 
 //https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
 //copy text to your clipboard
-function copyPost(id, e){
-    var text = window.location.href;
-    if(state !== 'comments'){
-        text = window.location.href.split('?')[0];
-        text = `${text}?location=comments&post=${id}`;
+function copyPost(id, event){
+    var text = window.location.href.split('?')[0];
+    text = `${text}?location=comments&post=${id}`;
+
+    if (window.clipboardData && window.clipboardData.setData) {
+        // IE specific code path to prevent textarea being shown while dialog is visible.
+        handleError('Link copied to clipboard');
+        return clipboardData.setData("Text", text); 
+    } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+        var textarea = document.createElement("textarea");
+        textarea.textContent = text;
+        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            var copy =  document.execCommand("copy");  // Security exception may be thrown by some browsers.
+            handleError('Link copied to clipboard');
+            return copy;
+        } catch (e) {
+            handleError('Failed to copy');
+            return false;
+        } finally {
+            document.body.removeChild(textarea);
+        }
     }
+}
+function copyPostComment(a_postID, a_commentID, event){
+    var text = window.location.href.split('?')[0];
+    text = `${text}?location=comments&post=${a_postID}&comment=${a_commentID}`;
 
     if (window.clipboardData && window.clipboardData.setData) {
         // IE specific code path to prevent textarea being shown while dialog is visible.

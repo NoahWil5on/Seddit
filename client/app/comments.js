@@ -1,16 +1,24 @@
 //single post
 const Post = function(props){
     //if there is no post let the user know
-    if(!props.post){
+    if(!props.post || !props.post.voters){
         return (
             <div className="post-list">
                 <h3 className="empty-post">This post doesn't seem to exist</h3>
             </div>
         );
     }
+    props.post.myVal = 0;
+    for(var i = 0; i < props.post.voters.length; i++){
+        if(props.post.voters[i].voter === myUsername){
+            props.post.myVal = props.post.voters[i].value;
+            break;
+        }
+    }
     //get date string
     var date = getDate(props.post.createdData);
     //return a properly formatted post
+    
     return (
         <div>
             <div className="post main-post">
@@ -30,17 +38,20 @@ const Post = function(props){
                     <div className="post-actions-inner">
                         <div className="post-vote">
                             <div className="action-button-inner">
-                                    <div className="vote">
-                                        <i className="material-icons">sentiment_very_satisfied</i>
-                                    </div>
-                                    <div className="vote">
-                                        <i className="material-icons">sentiment_very_dissatisfied</i>
-                                    </div>
+                                <div className="vote" onClick={(e) => doVote(props.post, 1, 'post', e)}>
+                                    <i className={`material-icons${props.post.myVal === 1 ? ' highlight' : ''}`}>sentiment_very_satisfied</i>
+                                </div>
+                                <div className="vote" onClick={(e) => doVote(props.post, -1, 'post', e)}>
+                                    <i className={`material-icons${props.post.myVal === -1 ? ' highlight' : ''}`}>sentiment_very_dissatisfied</i>
+                                </div>
+                                <div className="rating">
+                                    <p>{props.post.rating}</p>
+                                </div>
                             </div>
                         </div>
                         <div className="post-share">
                             <div className="action-button-inner">
-                                <div className="post-comment-button" onClick={copyPost}>Share</div>
+                                <div className="post-comment-button" onClick={(e) => copyPost(props.post._id, e)}>Share</div>
                             </div>
                         </div>
                     </div>
@@ -52,20 +63,56 @@ const Post = function(props){
 //returns all comment nodes
 const commentNodes = function(props){
     return props.comments.map(function(comment){
+        var highlight = false;
+
+        comment.myVal = 0;
+        for(var i = 0; i < comment.voters.length; i++){
+            if(comment.voters[i].voter === myUsername){
+                comment.myVal = comment.voters[i].value;
+                break;
+            }
+        }
+        if(`${comment._id}` === commentID){
+            highlight = true;
+        }
         var date = getDate(comment.createdData);
         return(
             <div key={comment._id} className="post comment-post">
-                <div className="post-header">
-                    <div className="post-image">
-                        <div className="profile-image" style={{backgroundImage: `url(./assets/img/user.png)`}}>
+                <div>
+                    <div className="post-header">
+                        <div className="post-image">
+                            <div className="profile-image" style={{backgroundImage: `url(./assets/img/user.png)`}}>
+                            </div>
+                        </div>
+                        <div className="post-details">
+                            <div className="post-author" dangerouslySetInnerHTML={{__html: comment.author}}></div>
+                            <div className="post-date">{date}</div>
                         </div>
                     </div>
-                    <div className="post-details">
-                        <div className="post-author" dangerouslySetInnerHTML={{__html: comment.author}}></div>
-                        <div className="post-date">{date}</div>
-                    </div>
+                    <p className={`post-title${highlight ? ' comment-highlight' : ''}`} dangerouslySetInnerHTML={{__html: comment.text}}></p>
                 </div>
-                <p className="post-title" dangerouslySetInnerHTML={{__html: comment.text}}></p>
+                <div className="post-actions">
+                    <div className="post-actions-inner">
+                        <div className="post-vote">
+                            <div className="action-button-inner">
+                                <div className="vote" onClick={(e) => doVote(comment, 1, 'comment', e)}>
+                                    <i className={`material-icons${comment.myVal === 1 ? ' highlight' : ''}`}>sentiment_very_satisfied</i>
+                                </div>
+                                <div className="vote" onClick={(e) => doVote(comment, -1, 'comment', e)}>
+                                    <i className={`material-icons${comment.myVal === -1 ? ' highlight' : ''}`}>sentiment_very_dissatisfied</i>
+                                </div>
+                                <div className="rating">
+                                    <p>{comment.rating}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="post-share">
+                            <div className="action-button-inner">
+                                <div className="post-comment-button" onClick={(e) => copyPostComment(comment.postId, comment._id,e)}>Share</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
             </div>
         );
     });

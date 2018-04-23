@@ -61,9 +61,70 @@ const makeComment = (request, response) => {
     return res.status(400).json({ error: 'An error occurred' });
   });
 };
+const doVote = (request, response) => {
+  const res = response;
+  const req = request;
+
+  if (!req.body.value || req.body.value === undefined || Math.abs(req.body.value) !== 1) {
+    return res.status(400).json({ error: 'Invalid vote value' });
+  }
+  return Comment.CommentModel.findById(req.body.id, (err, document) => {
+    const doc = document;
+    if (err) {
+      console.log(`${err}ealk;jdsk`);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+    let found = false;
+    let index = -1;
+    for (let i = 0; i < doc.voters.length; i++) {
+      if (doc.voters[i].voter === req.session.account.username) {
+        found = true;
+        index = i;
+      }
+    }
+    if (found) {
+      let mult = 1;
+      if (Number(doc.voters[index].value) !== 0) {
+        mult = 2;
+      }
+      if (Number(doc.voters[index].value) === Number(req.body.value)) {
+        mult = -1;
+      }
+
+      doc.voters[index].value = req.body.value;
+      doc.rating += Number(req.body.value) * mult;
+      return doc.save(e => {
+        if (e) {
+          console.log(e);
+          return res.json({ error: 'An error has occured while saving post' });
+        }
+        return res.json({ error: 'This post has been added to your liked posts' });
+      }).catch(e => {
+        console.log(e);
+        res.json({ error: 'An error has occured while saving post' });
+      });
+    }
+    doc.voters.push({
+      voter: req.session.account.username,
+      value: req.body.value,
+    });
+    doc.rating += Number(req.body.value);
+    return doc.save(e => {
+      if (e) {
+        console.log(e);
+        return res.json({ error: 'An error has occured while saving post' });
+      }
+      return res.json({ error: 'This post has been added to your liked posts' });
+    }).catch(e => {
+      console.log(e);
+      res.json({ error: 'An error has occured while saving post' });
+    });
+  });
+};
 // export  modules
 module.exports = {
   getPost,
   getComments,
   makeComment,
+  doVote,
 };

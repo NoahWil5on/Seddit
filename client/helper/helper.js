@@ -22,9 +22,38 @@ const sendAjax = (type, action, data, success) => {
         dataType: "json",
         success: success,
         error: function(xhr, status, error){
-            var messageObj = JSON.parse(xhr.responseText);
-            handleError(messageObj.error);
+            console.dir(xhr);
+            //var messageObj = JSON.parse(xhr.responseText);
+            handleError('errrororor');
+            //handleError(messageObj.error);
         }
+    })
+}
+const doVote = (post, value, voteType, e) => {
+    var index = 0;
+    var action = '/vote'
+    if(value === 1) index = 1;
+
+    var myButton = e.target.childNodes[0];
+    var otherButton = e.target.parentElement.childNodes[index].childNodes[0];
+    var rating = e.target.parentElement.childNodes[2].childNodes[0];
+
+    if(voteType === 'comment'){
+        action = '/voteComment'
+    }
+
+    sendAjax('POST', action, {id: post._id, value, _csrf: myCSRF}, () => {
+        var multiplier = 1;
+        if(myButton.classList.contains('highlight')){
+            multiplier = -1;
+        }
+        if(otherButton.classList.contains('highlight')){
+            multiplier = 2;
+        }
+        myButton.classList.toggle('highlight');
+        otherButton.classList.remove('highlight');
+
+        rating.innerHTML = Number(rating.innerHTML) + value * multiplier;
     })
 }
 //helper function to get a random image from a list of images
