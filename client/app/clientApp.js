@@ -59,7 +59,7 @@ const postNodes = function(props){
 
         let pizzaImage = getRandomImage();
         let myAd = (
-            <div className={`ad-div${Math.floor(Math.random() * 4) === 0 ? ' ad-height' : ''}`} style={{backgroundImage: `url('${pizzaImage}')`}}>
+            <div className={`my-ad-div${Math.floor(Math.random() * 4) === 0 ? ' ad-height' : ''}`} style={{backgroundImage: `url('${pizzaImage}')`}}>
             </div>
         )
         post.myVal = 0;

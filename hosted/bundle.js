@@ -86,7 +86,7 @@ var postNodes = function postNodes(props) {
         //randomly creates add
 
         var pizzaImage = getRandomImage();
-        var myAd = React.createElement('div', { className: 'ad-div' + (Math.floor(Math.random() * 4) === 0 ? ' ad-height' : ''), style: { backgroundImage: 'url(\'' + pizzaImage + '\')' } });
+        var myAd = React.createElement('div', { className: 'my-ad-div' + (Math.floor(Math.random() * 4) === 0 ? ' ad-height' : ''), style: { backgroundImage: 'url(\'' + pizzaImage + '\')' } });
         post.myVal = 0;
         for (var i = 0; i < post.voters.length; i++) {
             if (post.voters[i].voter === myUser.username) {
