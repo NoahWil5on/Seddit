@@ -21,6 +21,10 @@ const AccountSchema = new mongoose.Schema({
     type: Buffer,
     required: true,
   },
+  email: {
+      type: String,
+      required: true,
+  },
   password: {
     type: String,
     required: true,
@@ -28,6 +32,10 @@ const AccountSchema = new mongoose.Schema({
   lastPost: {
     type: Date,
     default: Date.now,
+  },
+  profilePhoto: {
+    type: String,
+    default: '',
   },
   createdDate: {
     type: Date,
@@ -40,6 +48,7 @@ AccountSchema.statics.toAPI = doc => ({
   username: doc.username,
   lastPost: doc.lastPost,
   createdData: doc.createdDate,
+  image: doc.profilePhoto,
   _id: doc._id,
 });
 
@@ -55,12 +64,20 @@ const validatePassword = (doc, password, callback) => {
     return callback(true);
   });
 };
+//find a specific user based off both username and email,
+//both must match
+AccountSchema.statics.findByUsernameEmail = (name, email, callback) => {
+    const search = {
+      username: name,
+      email: email
+    };
+    return AccountModel.findOne(search, callback);
+  };
 // find a single user by username
 AccountSchema.statics.findByUsername = (name, callback) => {
   const search = {
     username: name,
   };
-
   return AccountModel.findOne(search, callback);
 };
 // make a hash with password, McDonalds salt, and other password stuff

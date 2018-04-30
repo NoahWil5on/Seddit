@@ -223,7 +223,7 @@ nav:nth-child(1) {
     padding-top: 350px;
     font-size: 1.2em;
 }
-.form-div input[type=text], .form-div input[type=password]{
+.form-div input[type=text], .form-div input[type=password], .form-div input[type=email]{
     text-align: left !important;
     padding-left: 10px;
     position: relative;
@@ -306,13 +306,13 @@ nav:nth-child(1) {
     background-color: #338acc;
 }
 
-#user, #pass, #pass2 {
+#user, #pass, #pass2, #email, #code{
     text-align: center;
     font-size: 1.1em;
     width: 180px;
 }
 
-#user:focus, #pass:focus, #pass2:focus {
+#user:focus, #pass:focus, #pass2:focus, #email:focus, #code:focus {
     outline: none;
     box-shadow: 0px 0px 1px 1px #55acee;
 }
@@ -352,12 +352,18 @@ nav:nth-child(1) {
     transform: rotate(330deg);
 }
 
-#posts, #my-posts {
+#posts{
     width: 80%;
     min-width: 400px;
     max-width: 750px;
     margin: 0 auto;
     margin-top: 40px;
+}
+#my-posts{
+    width: 80%;
+    min-width: 400px;
+    max-width: 750px;
+    margin: 0 auto;
 }
 .post-list{
     margin-bottom: 200px;
@@ -368,7 +374,7 @@ nav:nth-child(1) {
 .post {
     position: relative;
     margin: 0 auto;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     border: none;
     min-height:60px;
     overflow: hidden;
@@ -409,6 +415,10 @@ nav:nth-child(1) {
     color: #444;
     font-size: 18pt;
     padding: 10pt;
+}
+.post-author{
+    font-weight: bold;
+    font-size: 14pt;
 }
 .post-content:hover{
     transition: background-color .5s ease-out;
@@ -608,8 +618,171 @@ input[type="hidden"]{
 #comments{
     margin-left: 40px;
 }
+#comment-display{
+    font-size: 16pt;
+    z-index: 100;
+    text-align: left;
+    font-style: italic;
+    font-family: serif;
+    color: white;
+    padding-bottom: 20px;
+    width: calc(100% - 100px);
+    min-width: 400px;
+    margin: 0 auto;
+}
 .comment-highlight{
     background-color: white;
     animation-name: highlightComment;
     animation-duration: 4s;
+}
+.padding-left{
+    padding-left: 40px;
+    border-left: 1px solid #ddd;
+}
+.margin-bottom{
+    margin-bottom: 30px;
+}
+select{
+    position: relative;
+    font-size: 14pt;
+    top: -20px;
+    cursor: auto;
+}
+select:hover{
+    cursor: pointer;
+}
+#my-profile-header{
+    top: -40px;
+    display: block;
+    margin-top: 0;
+    position: relative;
+    height: 100px;
+    background-color: #e95d32;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5);
+    width: 100%;
+}
+#header-photo-div{
+    display: inline-block;
+    position: relative;
+    width: 100px;
+    height: 100%;
+}
+#header-photo{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    background-position: center center;
+    background-size: cover
+}
+#header-photo-backdrop{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    color:white;
+    font-weight: bold;
+    font-size: 48pt;
+    cursor: auto;
+    transition: .5s opacity;
+}
+#header-photo-plus{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 20;
+}
+#header-photo-backdrop:hover{
+    opacity: 1;
+    cursor: pointer;
+}
+.backdrop-fill{
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: .5;
+    z-index: 10;
+}
+#header-name{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: white;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 24pt;
+}
+#change-holder{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 200;
+}
+#change-form-div{
+    width: 600px;
+    height: 100px;
+    background-color: #e95d32;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5);
+}
+.change-inner-div{
+    width: 90%;
+}
+#change-title{
+    padding: 3px;
+    margin: 0 auto;
+    width: 80%;
+    font-size: 18pt;
+    display: inline-block;
+    border: none;
+}
+.forgot{
+    display: block;
+    color: #666;
+    text-decoration: none;
+    margin-top: 10px;
+    cursor: auto;
+}
+.forgot:hover{
+    cursor: pointer;
+}
+#comment-post-switch{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#comment-post-switch button{
+    width: 120px;
+    font-size: 14pt;
+    border: 2px solid rgb(41, 13, 0);
+    color: white;
+    background-color: rgb(82, 26, 0);
+    border-bottom: none;
+    cursor: auto;
+    outline: none !important;
+}
+#comment-post-switch button:hover{
+   cursor: pointer;
+}
+#comment-post-switch button:active{
+    outline: none;
+ }
+.left{
+    border-top-left-radius: 4px;
+    transform: translateX(1px);
+}
+.right{
+    border-top-right-radius: 4px;
+    transform: translateX(-1px);
+}
+.profile-active{
+    background-color: rgb(230, 115, 63) !important;
 }

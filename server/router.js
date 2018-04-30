@@ -18,12 +18,15 @@ const router = (app) => {
 
     // profile page functions
   app.get('/getMyPosts', mid.requiresLogin, controllers.Post.getMyPosts);
+  app.post('/changePhoto', mid.requiresLogin, controllers.Account.changePhoto);
 
     // login page functions
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
-  app.get('/logout', mid.requiresLogin, controllers.Account.logout);
+  app.post('/checkEmail', mid.requiresSecure, mid.requiresLogout, controllers.Account.checkEmail)
+  app.post('/resetPassword', mid.requiresSecure, mid.requiresLogout, controllers.Account.resetPassword)
 
   // voting
   app.post('/vote', mid.requiresLogin, controllers.Post.doVote);

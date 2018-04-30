@@ -26,6 +26,10 @@ const CommentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  parentId: {
+    type: String,
+    defualt: '',
+  },
   voters: [{
     voter: {
       type: String,
@@ -54,6 +58,11 @@ CommentSchema.statics.findByPostId = (postId, callback) => {
 CommentSchema.statics.findById = (id, callback) => {
   const commentId = { _id: convertId(id) };
   return CommentModel.findOne(commentId, callback);
+};
+//find the parent of this post --not used
+CommentSchema.statics.findByParentId = (id, callback) => {
+  const parentId = { parentId: id };
+  return CommentModel.findOne(parentId, callback);
 };
 // model comment based on commentSchema
 CommentModel = mongoose.model('Comment', CommentSchema);

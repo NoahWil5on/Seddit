@@ -15,6 +15,12 @@ function appSetup() {
     if (comment && comment !== undefined) {
         commentID = `${comment}`;
     }
+    sortVal = myUrl.searchParams.get('sort');
+    if (sortVal && sortVal !== undefined) {
+        sort = sortVal;
+    }else{
+        sort = 'new'
+    }
 }
 //make a formatted date string
 function getDate(dateObject){
@@ -54,6 +60,8 @@ function copyPost(id, event){
         }
     }
 }
+//gets shareable link to specific comment so when link is shared the user 
+//will automatically be scrolled to the appropriate comment
 function copyPostComment(a_postID, a_commentID, event){
     var text = window.location.href.split('?')[0];
     text = `${text}?location=comments&post=${a_postID}&comment=${a_commentID}`;

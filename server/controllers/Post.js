@@ -52,27 +52,27 @@ const makePost = (request, response) => {
 
         // save the post to db
     return newPost.save().then(() => Account.AccountModel
-    .findByUsername(req.session.account.username, (err, document) => {
-      const doc = document;
-      if (err) {
-        console.log(err);
-        return res.json({ redirect: '/maker' });
-      }
-        // update the last time a user posted a post
-      doc.lastPost = new Date;
-      return doc.save((e) => {
-        if (e) {
-          console.log(e);
-        }
-        return res.json({ redirect: '/maker' });
-      });
-    })).catch((err) => {
-      console.log(err);
-      if (err.code === 11000) {
-        return res.status(400).json({ error: 'Post already exists' });
-      }
-      return res.status(400).json({ error: 'An error occurred' });
-    });
+            .findByUsername(req.session.account.username, (err, document) => {
+              const doc = document;
+              if (err) {
+                console.log(err);
+                return res.json({ redirect: '/maker' });
+              }
+                // update the last time a user posted a post
+              doc.lastPost = new Date;
+              return doc.save((e) => {
+                if (e) {
+                  console.log(e);
+                }
+                return res.json({ redirect: '/maker' });
+              });
+            })).catch((err) => {
+              console.log(err);
+              if (err.code === 11000) {
+                return res.status(400).json({ error: 'Post already exists' });
+              }
+              return res.status(400).json({ error: 'An error occurred' });
+            });
   });
 };
 // req.session.account._id,
@@ -90,24 +90,51 @@ const getMyPosts = (request, response) => {
     return res.json({ posts: docs });
   });
 };
+//get photo of any specific post
+const getPhoto = (dat, callback) => Account.AccountModel.
+    findByUsername(dat.author, () => {
+    }).then(obj => {
+      const data = dat;
+      data._doc.photoUrl = obj.profilePhoto;
+      return callback(data);
+    });
 // get all posts
 const getPosts = (request, response) => {
   const res = response;
 
-  return Post.PostModel.findAll((err, docs) => {
+  //find all posts to return to user
+  return Post.PostModel.findAll((err, docList) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
+    const docs = [];
+    //promise to find all profile photos before giving user the posts
+    const photoPromise = new Promise(resolve => {
+      let promiseCounter = 0;
+      docList.forEach(element => {
+        getPhoto(element, (obj) => {
+          docs.push(obj);
 
-    return res.json({ posts: docs });
+          //check to insure that all promises have been resolved before returning
+          promiseCounter++;
+          if (promiseCounter >= docList.length) {
+            resolve();
+          }
+        });
+      });
+    });
+//return once all promises are resolved
+    return photoPromise.then(() => {
+      res.json({ posts: docs });
+    });
   });
 };
-
+//cast vote on post
 const doVote = (request, response) => {
   const res = response;
   const req = request;
-
+//insure request is valid
   if (!req.body.value || req.body.value === undefined || Math.abs(req.body.value) !== 1) {
     return res.status(400).json({ error: 'Invalid vote value' });
   }
@@ -119,12 +146,15 @@ const doVote = (request, response) => {
     }
     let found = false;
     let index = -1;
+    //check if user has ever voted on post before
     for (let i = 0; i < doc.voters.length; i++) {
       if (doc.voters[i].voter === req.session.account.username) {
         found = true;
         index = i;
       }
     }
+    //update vote information appropriately depending
+    //on whether user has voted on post before in the past
     if (found) {
       let mult = 1;
       if (Number(doc.voters[index].value) !== 0) {
@@ -134,6 +164,7 @@ const doVote = (request, response) => {
         mult = -1;
       }
 
+      //save the new vote
       doc.voters[index].value = req.body.value;
       doc.rating += Number(req.body.value) * mult;
       return doc.save(e => {
@@ -147,6 +178,7 @@ const doVote = (request, response) => {
         res.json({ error: 'An error has occured while saving post' });
       });
     }
+    //save that this user has voted on post in the past and the value they voted with
     doc.voters.push({
       voter: req.session.account.username,
       value: req.body.value,
