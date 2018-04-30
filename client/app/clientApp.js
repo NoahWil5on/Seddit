@@ -56,14 +56,12 @@ const postNodes = function(props){
         var date = getDate(post.createdData);
 
         //randomly creates add
-        let ad = (<div></div>);
-        if(Math.floor(Math.random() * 4) === 0){
-            let pizzaImage = getRandomImage();
-            ad = (
-                <div className="ad-div" style={{backgroundImage: `url('${pizzaImage}')`}}>
-                </div>
-            )
-        }
+
+        let pizzaImage = getRandomImage();
+        let myAd = (
+            <div className={`ad-div${Math.floor(Math.random() * 4) === 0 ? ' ad-height' : ''}`} style={{backgroundImage: `url('${pizzaImage}')`}}>
+            </div>
+        )
         post.myVal = 0;
         for(var i = 0; i < post.voters.length; i++){
             if(post.voters[i].voter === myUser.username){
@@ -126,7 +124,9 @@ const postNodes = function(props){
                         </div>
                     </div>           
                 </div>
-                {ad}
+                <div>
+                    {myAd}
+                </div>
             </div>
         );
     });

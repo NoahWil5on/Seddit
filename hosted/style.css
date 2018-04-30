@@ -370,11 +370,13 @@ nav:nth-child(1) {
 }
 .ad-div{
     width: 100%;
-    height: 300px;
     background-position: center center;
     background-size: cover;
     margin-bottom: 20px;
     margin-top: -20px;
+}
+.ad-height{
+    height: 300px;
 }
 .post {
     position: relative;
