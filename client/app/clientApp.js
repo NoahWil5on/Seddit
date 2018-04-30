@@ -60,8 +60,7 @@ const postNodes = function(props){
         if(Math.floor(Math.random() * 4) === 0){
             let pizzaImage = getRandomImage();
             ad = (
-                <div className="ad-div">
-                   <img src={pizzaImage} alt="fake ad" />
+                <div className="ad-div" style={{backgroundImage: `url('${pizzaImage}')`}}>
                 </div>
             )
         }
