@@ -22,8 +22,8 @@ const AccountSchema = new mongoose.Schema({
     required: true,
   },
   email: {
-      type: String,
-      required: true,
+    type: String,
+    required: true,
   },
   password: {
     type: String,
@@ -64,15 +64,15 @@ const validatePassword = (doc, password, callback) => {
     return callback(true);
   });
 };
-//find a specific user based off both username and email,
-//both must match
+// find a specific user based off both username and email,
+// both must match
 AccountSchema.statics.findByUsernameEmail = (name, email, callback) => {
-    const search = {
-      username: name,
-      email: email
-    };
-    return AccountModel.findOne(search, callback);
+  const search = {
+    username: name,
+    email,
   };
+  return AccountModel.findOne(search, callback);
+};
 // find a single user by username
 AccountSchema.statics.findByUsername = (name, callback) => {
   const search = {

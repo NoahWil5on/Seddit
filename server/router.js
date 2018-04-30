@@ -25,8 +25,9 @@ const router = (app) => {
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
-  app.post('/checkEmail', mid.requiresSecure, mid.requiresLogout, controllers.Account.checkEmail)
-  app.post('/resetPassword', mid.requiresSecure, mid.requiresLogout, controllers.Account.resetPassword)
+  app.post('/checkEmail', mid.requiresSecure, mid.requiresLogout, controllers.Account.checkEmail);
+  app.post('/resetPassword', mid.requiresSecure, mid.
+  requiresLogout, controllers.Account.resetPassword);
 
   // voting
   app.post('/vote', mid.requiresLogin, controllers.Post.doVote);

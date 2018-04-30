@@ -90,7 +90,7 @@ const getMyPosts = (request, response) => {
     return res.json({ posts: docs });
   });
 };
-//get photo of any specific post
+// get photo of any specific post
 const getPhoto = (dat, callback) => Account.AccountModel.
     findByUsername(dat.author, () => {
     }).then(obj => {
@@ -102,21 +102,21 @@ const getPhoto = (dat, callback) => Account.AccountModel.
 const getPosts = (request, response) => {
   const res = response;
 
-  //find all posts to return to user
+  // find all posts to return to user
   return Post.PostModel.findAll((err, docList) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
     const docs = [];
-    //promise to find all profile photos before giving user the posts
+    // promise to find all profile photos before giving user the posts
     const photoPromise = new Promise(resolve => {
       let promiseCounter = 0;
       docList.forEach(element => {
         getPhoto(element, (obj) => {
           docs.push(obj);
 
-          //check to insure that all promises have been resolved before returning
+          // check to insure that all promises have been resolved before returning
           promiseCounter++;
           if (promiseCounter >= docList.length) {
             resolve();
@@ -124,17 +124,17 @@ const getPosts = (request, response) => {
         });
       });
     });
-//return once all promises are resolved
+// return once all promises are resolved
     return photoPromise.then(() => {
       res.json({ posts: docs });
     });
   });
 };
-//cast vote on post
+// cast vote on post
 const doVote = (request, response) => {
   const res = response;
   const req = request;
-//insure request is valid
+// insure request is valid
   if (!req.body.value || req.body.value === undefined || Math.abs(req.body.value) !== 1) {
     return res.status(400).json({ error: 'Invalid vote value' });
   }
@@ -146,15 +146,15 @@ const doVote = (request, response) => {
     }
     let found = false;
     let index = -1;
-    //check if user has ever voted on post before
+    // check if user has ever voted on post before
     for (let i = 0; i < doc.voters.length; i++) {
       if (doc.voters[i].voter === req.session.account.username) {
         found = true;
         index = i;
       }
     }
-    //update vote information appropriately depending
-    //on whether user has voted on post before in the past
+    // update vote information appropriately depending
+    // on whether user has voted on post before in the past
     if (found) {
       let mult = 1;
       if (Number(doc.voters[index].value) !== 0) {
@@ -164,7 +164,7 @@ const doVote = (request, response) => {
         mult = -1;
       }
 
-      //save the new vote
+      // save the new vote
       doc.voters[index].value = req.body.value;
       doc.rating += Number(req.body.value) * mult;
       return doc.save(e => {
@@ -178,7 +178,7 @@ const doVote = (request, response) => {
         res.json({ error: 'An error has occured while saving post' });
       });
     }
-    //save that this user has voted on post in the past and the value they voted with
+    // save that this user has voted on post in the past and the value they voted with
     doc.voters.push({
       voter: req.session.account.username,
       value: req.body.value,

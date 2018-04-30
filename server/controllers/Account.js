@@ -81,7 +81,7 @@ const signup = (request, response) => {
     });
   });
 };
-//change/create profile image for user
+// change/create profile image for user
 const changePhoto = (request, response) => {
   const req = request;
   const res = response;
@@ -90,17 +90,17 @@ const changePhoto = (request, response) => {
     return res.status(400).json({ error: 'You must enter a URL' });
   }
 
-  //find the correct user
+  // find the correct user
   return Account.AccountModel.findByUsername(req.session.account.username, (err, document) => {
     if (err) {
       console.log(err);
     }
-    //set new image and update session information
+    // set new image and update session information
     const doc = document;
     doc.profilePhoto = req.body.photo;
     req.session.account.image = req.body.photo;
 
-    //save photo
+    // save photo
     return doc.save((e) => {
       if (e) {
         console.log(e);
@@ -117,7 +117,7 @@ const getToken = (request, response) => {
   const req = request;
   const res = response;
 
-  //lazy way of getting user's name and profile image all in one go
+  // lazy way of getting user's name and profile image all in one go
   const token = {
     csrfToken: req.csrfToken(),
   };
@@ -134,79 +134,78 @@ const getToken = (request, response) => {
     // return csrf token + name cuz we might need that
   res.json({ token, name, image });
 };
-//gets a random security code for resetting the password
-//the way its set up it offers little to no security benefit
-//but demonstrates how security could be improved had email been set up 
-//in this project
+// gets a random security code for resetting the password
+// the way its set up it offers little to no security benefit
+// but demonstrates how security could be improved had email been set up
+// in this project
 const getCode = () => {
-    let code = '';
-    let index = 0;
-    while(index < 6){
-        code = `${code}${Math.floor(Math.random() * 10)}`;
-        index++;
-    }
-    return code;
-}
-//insure username and email match up correctly
+  let code = '';
+  let index = 0;
+  while (index < 6) {
+    code = `${code}${Math.floor(Math.random() * 10)}`;
+    index++;
+  }
+  return code;
+};
+// insure username and email match up correctly
 const checkEmail = (request, response) => {
-    const req = request;
-    const res = response;
+  const req = request;
+  const res = response;
 
-    req.body.email = `${req.body.email}`;
-    req.body.username =`${req.body.username}`;
+  req.body.email = `${req.body.email}`;
+  req.body.username = `${req.body.username}`;
 
-    if (!req.body.email || req.body.username === '') {
-        return res.status(400).json({ error: 'You must fill out all fields' });
+  if (!req.body.email || req.body.username === '') {
+    return res.status(400).json({ error: 'You must fill out all fields' });
+  }
+
+    // find an account with both the username and email that user entered
+  return Account.AccountModel.findByUsernameEmail(req.body.username, req.body.email, (err, doc) => {
+    if (err || !doc || doc === undefined) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
     }
-
-    //find an account with both the username and email that user entered
-    return Account.AccountModel.findByUsernameEmail(req.body.username, req.body.email, (err, doc) => {
-        if (err || !doc || doc === undefined) {
-            console.log(err);
-            return res.status(400).json({ error: 'An error occurred' });
-        }
-        req.session.username = req.body.username;
-        req.session.resetCode = getCode();
-        return res.json({ doReset: true, code: req.session.resetCode });
-    })
-}
-//actually reset the users password
+    req.session.username = req.body.username;
+    req.session.resetCode = getCode();
+    return res.json({ doReset: true, code: req.session.resetCode });
+  });
+};
+// actually reset the users password
 const resetPassword = (request, response) => {
-    const req = request;
-    const res = response;
+  const req = request;
+  const res = response;
 
-    req.body.pass = `${req.body.pass}`;
-    req.body.pass2 =`${req.body.pass2}`;
-    req.body.code =`${req.body.code}`;
+  req.body.pass = `${req.body.pass}`;
+  req.body.pass2 = `${req.body.pass2}`;
+  req.body.code = `${req.body.code}`;
 
-    //insure data is valid
-    if (req.body.pass === '' || req.body.pass2 === '') {
-        return res.status(400).json({ error: 'All fields are required' });
-    }
-    if (req.body.pass !== req.body.pass2) {
-        return res.status(400).json({ error: 'Passwords must match' });
-    }
-    //check security code
-    if (req.body.code !== `${req.session.resetCode}`) {
-        return res.status(400).json({ error: 'Incorrect Code' });
-    }
-    //generate new hash for user
-    return Account.AccountModel.generateHash(req.body.pass, (salt, hash) => {
-        return Account.AccountModel.findByUsername(req.session.username, (err, document) => {
-            const doc = document;
-            doc.salt = salt;
-            doc.password = hash; 
+    // insure data is valid
+  if (req.body.pass === '' || req.body.pass2 === '') {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+  if (req.body.pass !== req.body.pass2) {
+    return res.status(400).json({ error: 'Passwords must match' });
+  }
+    // check security code
+  if (req.body.code !== `${req.session.resetCode}`) {
+    return res.status(400).json({ error: 'Incorrect Code' });
+  }
+    // generate new hash for user
+  return Account.AccountModel.generateHash(req.body.pass, (salt, hash) => Account.AccountModel.
+  findByUsername(req.session.username, (err, document) => {
+    const doc = document;
+    doc.salt = salt;
+    doc.password = hash;
                 // save new user to db
-            return doc.save().then(() => {
-                req.session.account = Account.AccountModel.toAPI(doc);
-                return res.json({ redirect: '/maker' });
-            }).catch((err) => {
-                console.log(err);
-                return res.status(400).json({ error: 'An error occurred' });
-            });
-        })
+    return doc.save().then(() => {
+      req.session.account = Account.AccountModel.toAPI(doc);
+      return res.json({ redirect: '/maker' });
+    }).catch((error) => {
+      console.log(error);
+      return res.status(400).json({ error: 'An error occurred' });
     });
-}
+  }));
+};
 
 // export modules.
 module.exports = {
