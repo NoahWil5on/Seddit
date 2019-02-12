@@ -209,11 +209,6 @@ var postNodes = function postNodes(props) {
                         )
                     )
                 )
-            ),
-            React.createElement(
-                'div',
-                null,
-                myAd
             )
         );
     });

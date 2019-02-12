@@ -1,5 +1,5 @@
 {
-    "name": "Logins",
+    "name": "Seddit",
     "version": "1.0.0",
     "engines": {
         "node": "7.5.0",
@@ -10,7 +10,7 @@
     "scripts": {
         "buildLoginBundle": "babel ./client/login ./client/helper --presets react --out-file ./hosted/loginBundle.js",
         "buildAppBundle": "babel ./client/app ./client/helper --presets react --out-file ./hosted/bundle.js",
-        "build": "npm run buildLoginBundle && npm run buildlAppBundle",
+        "build": "npm run buildLoginBundle && npm run buildAppBundle",
         "watchLoginBundle": "babel --watch ./client/login ./client/helper --presets react --out-file ./hosted/loginBundle.js",
         "watchAppBundle": "babel --watch ./client/app ./client/helper --presets react --out-file ./hosted/bundle.js",
         "nodemon": "nodemon --watch ./server ./server/app.js",
@@ -24,7 +24,7 @@
         "Redis",
         "Login"
     ],
-    "author": "Cody Van De Mark",
+    "author": "Noah Wilson",
     "license": "Apache 2.0",
     "dependencies": {
         "body-parser": "^1.15.0",

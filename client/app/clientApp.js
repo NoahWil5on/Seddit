@@ -61,7 +61,7 @@ const postNodes = function(props){
         let myAd = (
             <div className={`my-ad-div${Math.floor(Math.random() * 4) === 0 ? ' ad-height' : ''}`} style={{backgroundImage: `url('${pizzaImage}')`}}>
             </div>
-        )
+        );
         post.myVal = 0;
         for(var i = 0; i < post.voters.length; i++){
             if(post.voters[i].voter === myUser.username){
@@ -123,9 +123,6 @@ const postNodes = function(props){
                             </div>
                         </div>
                     </div>           
-                </div>
-                <div>
-                    {myAd}
                 </div>
             </div>
         );
