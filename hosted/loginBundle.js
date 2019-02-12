@@ -79,9 +79,11 @@ var LoginWindow = function LoginWindow(props) {
         )
     );
 };
+//change to forgot password window
 var doForgot = function doForgot(e, props) {
     ReactDOM.render(React.createElement(ForgotWindow, { csrf: props.csrf }), document.querySelector('#content'));
 };
+//render forgot window
 var ForgotWindow = function ForgotWindow(props) {
     return React.createElement(
         "div",
@@ -113,6 +115,7 @@ var ForgotWindow = function ForgotWindow(props) {
         )
     );
 };
+//make sure email is valid with account
 var handleEmailCheck = function handleEmailCheck(e) {
     e.preventDefault();
 
@@ -132,6 +135,9 @@ var handleEmailCheck = function handleEmailCheck(e) {
 
     return false;
 };
+//password change window 
+//comes after the server has confirmed that this is indeed the
+//right user
 var ChangeWindow = function ChangeWindow(props) {
     return React.createElement(
         "div",
@@ -179,6 +185,7 @@ var ChangeWindow = function ChangeWindow(props) {
         )
     );
 };
+//handles submitting password reset post and making sure information is correctly validated
 var handResetPassword = function handResetPassword(e) {
     e.preventDefault();
 
@@ -305,6 +312,9 @@ var sendAjax = function sendAjax(type, action, data, success) {
         }
     });
 };
+//Display to the user the post they are commenting on.
+//is viewable near the text box where comments are made.
+//"will have said parent comment in quotes"
 var commentPost = function commentPost(id, text, isCommentPost) {
     var formCommentText = document.getElementById('comment-display');
     var formTextArea = document.getElementById('comment-text');
@@ -320,6 +330,9 @@ var commentPost = function commentPost(id, text, isCommentPost) {
     formTextArea.setAttribute('placeholder', 'What do you think about this comment?');
 };
 
+//cast a vote and highlight it so the user knows what they've done
+//voting value alter depending on whether or not they have liked the post already
+//and are changing their value
 var doVote = function doVote(post, value, voteType, e) {
     var index = 0;
     var action = '/vote';
@@ -347,11 +360,14 @@ var doVote = function doVote(post, value, voteType, e) {
         rating.innerHTML = Number(rating.innerHTML) + value * multiplier;
     });
 };
+//toggle the type of sorting method used throughout the application
 var doSort = function doSort(e) {
     var myUrl = new URL(window.location.href);
     myUrl.searchParams.set('sort', e.target.value);
     window.location.href = myUrl;
+    sort = e.target.value;
 };
+//toggle visibility of photo changer
 var doChange = function doChange(e) {
     document.getElementById('change-holder').classList.toggle('hidden');
 };
