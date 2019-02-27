@@ -16,7 +16,7 @@ const csrf = require('csurf');
 const router = require('./router.js');
 
 // setup environment information
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/Seddit';
 
 // connect to our database
